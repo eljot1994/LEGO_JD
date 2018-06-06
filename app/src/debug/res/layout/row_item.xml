@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linear"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_weight="0"
+        android:padding="5dp"
+        app:srcCompat="@drawable/test"
+        android:contentDescription="TODO" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="96dp"
+        android:layout_height="100dp"
+        android:layout_weight="1"
+        android:baselineAligned="false"
+        android:isScrollContainer="false"
+        android:padding="5dp"
+
+        android:text="Opis"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/button_minus"
+        android:layout_width="40dp"
+        android:layout_height="100dp"
+        android:layout_weight="0"
+        android:background="@drawable/btn_tri"
+        android:rotation="135"
+        android:transformPivotX="40dp"
+        android:transformPivotY="50dp"
+        android:translationY="35dp" />
+
+    <TextView
+        android:id="@+id/store"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_weight="0"
+        android:padding="5dp"
+        android:textColor="@android:color/white"
+        android:text="  /  " />
+
+    <Button
+        android:id="@+id/button_plus"
+        android:layout_width="40dp"
+        android:layout_height="100dp"
+        android:layout_weight="0"
+        android:background="@drawable/btn_tri"
+        android:rotation="315"
+        android:transformPivotX="0dp"
+        android:transformPivotY="100dp"
+        android:translationX="8dp"
+        android:translationY="-24dp" />
+
+</LinearLayout>
