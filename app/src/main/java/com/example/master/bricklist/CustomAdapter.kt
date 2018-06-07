@@ -4,8 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.Color.*
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +21,7 @@ class CustomAdapter(var activity: Activity, var items: ArrayList<Part>) : BaseAd
         var button_plus: Button? = null
         var button_minus: Button? = null
 
+
         init{
             linearLayout = row?.findViewById(R.id.linear)
             imageView = row?.findViewById(R.id.imageView)
@@ -33,9 +32,12 @@ class CustomAdapter(var activity: Activity, var items: ArrayList<Part>) : BaseAd
         }
     }
 
+
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view: View?
         val viewHolder: ViewHolder
+
         if(convertView == null){
             val inflater = activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             view = inflater.inflate(R.layout.row_item, null)
@@ -49,6 +51,7 @@ class CustomAdapter(var activity: Activity, var items: ArrayList<Part>) : BaseAd
         if(part.image != null){
             val bitmap = BitmapFactory.decodeByteArray(part.image, 0, part.image!!.size)
             viewHolder.imageView?.setImageBitmap(bitmap)
+
         }
         viewHolder.textView?.text = part.name
         viewHolder.store?.text = part.quantityInStore.toString()+ '/' + part.quantityInSet.toString()
@@ -56,6 +59,9 @@ class CustomAdapter(var activity: Activity, var items: ArrayList<Part>) : BaseAd
 
         if(part.quantityInStore == part.quantityInSet){
             viewHolder.linearLayout?.setBackgroundColor(Color.argb(50,51,204,51))
+            part.pozycja = 0
+            items.sortBy { it.pozycja }
+            this?.notifyDataSetChanged()
         }
 
         viewHolder.button_plus?.setOnClickListener{
@@ -66,6 +72,11 @@ class CustomAdapter(var activity: Activity, var items: ArrayList<Part>) : BaseAd
             }
             if(part.quantityInStore == part.quantityInSet){
                 viewHolder.linearLayout?.setBackgroundColor(Color.argb(50,51,204,51))
+                part.pozycja = 0
+                items.sortBy { it.pozycja }
+                this?.notifyDataSetChanged()
+
+
             }
         }
         viewHolder.button_minus?.setOnClickListener {
@@ -77,9 +88,12 @@ class CustomAdapter(var activity: Activity, var items: ArrayList<Part>) : BaseAd
             }
             if(part.quantityInStore != part.quantityInSet){
                 viewHolder.linearLayout?.setBackgroundColor(Color.TRANSPARENT)
+                part.pozycja = -1
+                items.sortBy { it.pozycja }
+                this?.notifyDataSetChanged()
             }
         }
-
+        items.sortBy { it.pozycja }
         return view as View
     }
 

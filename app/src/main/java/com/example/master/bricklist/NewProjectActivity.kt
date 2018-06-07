@@ -1,11 +1,11 @@
 package com.example.master.bricklist
 
-import android.app.AlertDialog
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.os.AsyncTask
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -152,6 +152,7 @@ class NewProjectActivity : AppCompatActivity() {
                                     url = "http://img.bricklink.com/P/" + part.colorID + "/" + part.itemID + ".gif"
                                     if(!getImage(url ,part.partID!!, part.colorID!!, dbHandler)){
                                         url = "https://www.bricklink.com/PL/" + part.itemID + ".jpg"
+
                                         getImage(url ,part.partID!!, part.colorID!!,dbHandler)
                                     }else{
                                         url = "https://www.lego.com/service/bricks/5/2/300126"
@@ -196,15 +197,12 @@ class NewProjectActivity : AppCompatActivity() {
                 fos.close()
             }
             catch(e: MalformedURLException){
-
                 return "Błąd z URL!"
             }
             catch (e: FileNotFoundException){
-
                 return "Pliku nie znaleziono!"
             }
             catch (e: IOException){
-
                 return "Wyjątek IO!"
             }
 

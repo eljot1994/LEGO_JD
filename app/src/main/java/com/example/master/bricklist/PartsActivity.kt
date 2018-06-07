@@ -2,7 +2,6 @@ package com.example.master.bricklist
 
 import android.Manifest
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.pm.PackageManager
 import android.os.AsyncTask
 import android.os.Bundle
@@ -10,6 +9,7 @@ import android.os.Environment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.ListView
 import android.widget.Toast
@@ -36,6 +36,7 @@ class Part {
     var partID:Int? = null
     var designID:Int? = null
     var image:ByteArray ?= null
+    var pozycja:Int = -1
 
     override fun toString(): String {
         return id.toString() + " "+ inventoryID.toString()+ " " + itemType + " "+ typeID.toString()+ " "+
@@ -51,8 +52,8 @@ class PartsActivity : AppCompatActivity() {
     var id:Int? = null
     var name:String? = null
     var items = ArrayList<Part>()
-    var sorted:Boolean?= null
-    var dialog: ProgressDialog?= null
+
+
 
     var adapter : CustomAdapter ?= null
     var listView : ListView ?= null
@@ -64,11 +65,12 @@ class PartsActivity : AppCompatActivity() {
         val extras = intent.extras ?: return
         id = extras.getInt("id")
         name = extras.getString("name")
-        sorted = extras.getBoolean("sorted")
+
         val pg = PartsGetter()
-        dialog = ProgressDialog.show(this,"","Otwieranie zestawu..." , true)
 
         pg.execute(this)
+
+        adapter?.notifyDataSetChanged()
     }
 
     override fun finish() {
@@ -122,23 +124,25 @@ class PartsActivity : AppCompatActivity() {
             builder.setMessage("Gdzie chcesz zapisać plik?")
             builder.setPositiveButton("Karta SD"){dialog, which ->
                 path = Environment.getExternalStorageDirectory()
-                val outDir = File(path, "BrickListExports")
+                val outDir = File(path, "LEGO")
+                Log.i("TEST",outDir.toString())
                 outDir.mkdir()
 
-                val file = File(path.toString() + "/BrickListExports", name + id.toString() + ".xml")
-
+                val file = File(outDir, name + id.toString() + ".xml")
+                Log.i("TEST",file.toString())
                 transformer.transform(DOMSource(doc), StreamResult(file))
 
                 Toast.makeText(this,"Plik zapisano na karcie SD",Toast.LENGTH_SHORT).show()
 
             }
-            builder.setNegativeButton("Pamięć telefonu"){dialog,which ->
+            builder.setNegativeButton("Pamięć telefonu"){dialog, which ->
                 path = this.filesDir
-                val outDir = File(path, "BrickListExports")
+                val outDir = File(path, "LEGO")
+                Log.i("TEST",outDir.toString())
                 outDir.mkdir()
 
-                val file = File(path.toString() + "/BrickListExports", name + id.toString() + ".xml")
-
+                val file = File(outDir, name + id.toString() + ".xml")
+                Log.i("TEST",file.toString())
                 transformer.transform(DOMSource(doc), StreamResult(file))
 
                 Toast.makeText(this,"Plik zapisano w pamięci telefonu",Toast.LENGTH_SHORT).show()
@@ -146,8 +150,6 @@ class PartsActivity : AppCompatActivity() {
             }
             val dialog: AlertDialog = builder.create()
             dialog.show()
-
-
 
         }else{
             Toast.makeText(this,"Brak zgody na zapis pliku",Toast.LENGTH_SHORT).show()
@@ -162,13 +164,16 @@ class PartsActivity : AppCompatActivity() {
 
             runOnUiThread(Runnable {
                 listView = findViewById(R.id.listView)
+                items.sortBy { it.pozycja }
                 adapter = CustomAdapter(params[0]!!, items)
                 listView?.adapter = adapter
                 adapter?.notifyDataSetChanged()
-                dialog?.cancel()
+
+
+
             })
 
-            return "success"
+            return "Sukces!"
         }
     }
 }
